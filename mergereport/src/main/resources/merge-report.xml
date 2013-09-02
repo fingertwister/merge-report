@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <!-- Add repository configurations by name to the merge report here. As many repositories can be added as desired. -->
+  <bean id="mergeReport" class="au.net.thehardings.ims.mergereport.MergeReport">
+    <property name="repositories">
+      <list>
+        <ref bean="mergeReportRepo"/>
+      </list>
+    </property>
+  </bean>
+
+  <!-- A repository diff configuration. Create one of these for each repository to report on -->
+  <bean id="mergeReportRepo" class="au.net.thehardings.ims.mergereport.model.Repository">
+    <!-- This is the name of the branch in the repository we are running the report on. For trunk, just put "trunk" -->
+    <property name="branchName" value="dev"/>
+    <!-- This is the local clean check out of the "merge to" repository. It can be another branch or trunk. -->
+    <!-- You will need to make sure this directory is updated to latest in the run script for every entry in this file -->
+    <property name="basePath" value="C:/merge-report/merge-report-trunk"/>
+    <!-- This is the name of this particular diff in the report for display in the email so people know where to action the merge -->
+    <property name="name" value="merge-report-dev to merge-report-trunk"/>
+    <!-- The base url of the svn repository. Your trunk and branches directories should sit at the next level down -->
+    <property name="url" value="https://url/to/my/server/merge-report"/>
+  </bean>
+
+</beans>

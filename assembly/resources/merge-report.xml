@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <bean id="mergeReport" class="au.net.thehardings.ims.mergereport.MergeReport">
+    <property name="repositories">
+      <list>
+        <ref bean="fitnesseRepo"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="fitnesseRepo" class="au.net.thehardings.ims.mergereport.model.Repository">
+    <property name="branchName" value="dev"/>
+    <property name="basePath" value="C:/merge-report/fitnesse-trunk"/>
+    <property name="name" value="fitnesse-dev to fitnesse-trunk"/>
+    <property name="url" value="http://svn.code.sf.net/p/fitnesse/code"/>
+  </bean>
+
+</beans>
