@@ -372,7 +372,7 @@ public class MergeReportTest extends AllTests {
 
     public static class MockablePrintStream extends PrintStream {
         public MockablePrintStream() throws FileNotFoundException {
-            super("/temp/test.txt");
+            super(System.out);
         }
     }
 
