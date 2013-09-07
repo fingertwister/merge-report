@@ -1,9 +1,9 @@
 package au.net.thehardings.ims.mergereport.process;
 
+import au.net.thehardings.ims.mergereport.AllTests;
+
 import java.io.File;
 import java.util.Scanner;
-
-import au.net.thehardings.ims.mergereport.AllTests;
 
 /**
  * The class <code>SimpleProcessWrapperTest</code>
@@ -28,7 +28,11 @@ public class SimpleProcessWrapperTest extends AllTests {
      * @throws Exception if an error occurs during test
      */
     public void testRunProcess() throws Exception {
-        Scanner scanner = simpleProcessWrapper.runProcess("echo this is a test", new File("."));
+        String cmd = "echo this is a test";
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            cmd = "cmd /c " + cmd;
+        }
+        Scanner scanner = simpleProcessWrapper.runProcess(cmd, new File("."));
         assertEquals("Process was not executed successfully.", "this is a test", scanner.nextLine());
     }
 
@@ -39,13 +43,11 @@ public class SimpleProcessWrapperTest extends AllTests {
      * @throws Exception if an error occurs during test
      */
     public void testRunProcessException() throws Exception {
-        File dir = new File("bad-file-name");
+        File dir = new File("invalid-directory");
         try {
             simpleProcessWrapper.runProcess("invalid-command", dir);
-            fail("An exception should have been thrown.");
         } catch (Exception e) {
-            String command = simpleProcessWrapper.convertCommand("invalid-command");
-            assertEquals("Not the expected exception message.", String.format("An error occurred while running process '%s' in directory '%s'", command, dir.getAbsolutePath()), e.getMessage());
+            assertEquals("Not the expected exception message.", String.format("An error occurred while running process 'invalid-command' in directory '%s'", dir.getAbsolutePath()), e.getMessage());
         }
     }
 }
