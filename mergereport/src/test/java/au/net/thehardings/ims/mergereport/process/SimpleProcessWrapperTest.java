@@ -28,7 +28,7 @@ public class SimpleProcessWrapperTest extends AllTests {
      * @throws Exception if an error occurs during test
      */
     public void testRunProcess() throws Exception {
-        Scanner scanner = simpleProcessWrapper.runProcess("cmd /c echo this is a test", new File("."));
+        Scanner scanner = simpleProcessWrapper.runProcess("echo this is a test", new File("."));
         assertEquals("Process was not executed successfully.", "this is a test", scanner.nextLine());
     }
 
@@ -39,12 +39,13 @@ public class SimpleProcessWrapperTest extends AllTests {
      * @throws Exception if an error occurs during test
      */
     public void testRunProcessException() throws Exception {
-        File dir = new File(".");
+        File dir = new File("bad-file-name");
         try {
-            simpleProcessWrapper.runProcess("echo", dir);
+            simpleProcessWrapper.runProcess("invalid-command", dir);
             fail("An exception should have been thrown.");
         } catch (Exception e) {
-            assertEquals("Not the expected exception message.", "An error occurred while running process 'echo' in directory '" + dir.getAbsolutePath() + "'", e.getMessage());
+            String command = simpleProcessWrapper.convertCommand("invalid-command");
+            assertEquals("Not the expected exception message.", String.format("An error occurred while running process '%s' in directory '%s'", command, dir.getAbsolutePath()), e.getMessage());
         }
     }
 }

@@ -15,15 +15,32 @@ public class SimpleProcessWrapper implements ProcessWrapper {
      * Logger for this class.
      */
     private static final Logger LOG = LoggerFactory.getLogger(SimpleProcessWrapper.class);
+    static String OS = null;
     Process p;
 
     public Scanner runProcess(String command, File dir) {
-        LOG.debug("Running command '" + command + "' in directory '" + dir.getAbsolutePath() + "'.");
+        String cmd = convertCommand(command);
+        LOG.debug("Running command '" + cmd + "' in directory '" + dir.getAbsolutePath() + "'.");
         try {
-            p = Runtime.getRuntime().exec(command, null, dir);
+            p = Runtime.getRuntime().exec(cmd, null, dir);
             return new Scanner(p.getInputStream());
         } catch (IOException e) {
-            throw new RuntimeException("An error occurred while running process '" + command + "' in directory '" + dir.getAbsolutePath() + "'", e);
+            throw new RuntimeException("An error occurred while running process '" + cmd + "' in directory '" + dir.getAbsolutePath() + "'", e);
         }
+    }
+
+    String convertCommand(String command) {
+        return isWindows() ? "cmd /c " + command : command;
+    }
+
+    public static String getOsName() {
+        if (OS == null) {
+            OS = System.getProperty("os.name");
+        }
+        return OS;
+    }
+
+    public static boolean isWindows() {
+        return getOsName().startsWith("Windows");
     }
 }
